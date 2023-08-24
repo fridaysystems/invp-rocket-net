@@ -30,9 +30,12 @@ function invp_rocket_purge() {
 		error_log( '[invp-rocket-net] Failed to purge Rocket.net CDN during invp_feed_complete action hook.' );
 		return;
 	}
-	$site_id = 19367; // 19367 = fm01.
-	if ( 'fm02' === $install_label ) {
-		$site_id = 51224; // 51224 = fm02.
+
+	$site_id = defined( 'CDN_SITE_ID' ) ? CDN_SITE_ID : 0;
+	// 19367 = fm01.
+	// 51224 = fm02.
+	if ( empty( $site_id ) ) {
+		return;
 	}
 	$endpoint = sprintf(
 		'https://api.rocket.net/v1/sites/%d/cache/purge_everything',
