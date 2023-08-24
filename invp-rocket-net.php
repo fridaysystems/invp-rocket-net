@@ -22,14 +22,6 @@ function invp_rocket_purge() {
 		// No. Abort.
 		return;
 	}
-	// Which install this site is on?
-	$home_url       = get_home_url();
-	$primary_domain = wp_parse_url( $home_url, PHP_URL_HOST ); // Should be fm01.friday.systems not chrisgoodnowautosales.com.
-	$install_label  = explode( '.', $primary_domain )[0] ?? '';
-	if ( empty( $install_label ) ) {
-		error_log( '[invp-rocket-net] Failed to purge Rocket.net CDN during invp_feed_complete action hook.' );
-		return;
-	}
 
 	$site_id = defined( 'CDN_SITE_ID' ) ? CDN_SITE_ID : 0;
 	// 19367 = fm01.
