@@ -23,15 +23,14 @@ function invp_rocket_purge() {
 		return;
 	}
 
-	$site_id = defined( 'CDN_SITE_ID' ) ? CDN_SITE_ID : 0;
-	// 19367 = fm01.
-	// 51224 = fm02.
-	if ( empty( $site_id ) ) {
+	if ( ! defined( 'CDN_SITE_ID' ) ) {
+		// Something's not right.
 		return;
 	}
+
 	$endpoint = sprintf(
 		'https://api.rocket.net/v1/sites/%d/cache/purge_everything',
-		$site_id
+		CDN_SITE_ID
 	);
 
 	// Send an API request to api.rocket.net.
