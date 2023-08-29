@@ -31,14 +31,15 @@ function invp_rocket_purge() {
 		return;
 	}
 
-	$endpoint = sprintf(
-		'https://api.rocket.net/v1/sites/%d/cache/purge_everything',
-		CDN_SITE_ID
+	$blog_domain = wp_parse_url( site_url(), PHP_URL_HOST );
+	$endpoint    = sprintf(
+		'https://api.rocket.net/v1/sites/%d/cache/purge_everything?domain=%s',
+		CDN_SITE_ID,
+		$blog_domain
 	);
 
 	// Send an API request to api.rocket.net.
-	$blog_domain = wp_parse_url( site_url(), PHP_URL_HOST );
-	$args        = array(
+	$args     = array(
 		'headers' => array(
 			'Authorization' => 'Bearer ' . $token,
 			'Content-Type'  => 'application/json',
@@ -49,7 +50,7 @@ function invp_rocket_purge() {
 			)
 		),
 	);
-	$response    = wp_remote_post( $endpoint, $args );
+	$response = wp_remote_post( $endpoint, $args );
 	if ( is_wp_error( $response ) ) {
 		error_log( '[invp-rocket-net][' . $blog_domain . '] ' . $response->get_error_message() );
 	}
