@@ -5,7 +5,7 @@
  * Description: Purges Rocket.net CDN cache when vehicles are updated via the WordPress REST API
  * Author: Corey Salzano
  * Author URI: https://github.com/csalzano
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * @package invp-rocket-net
  */
