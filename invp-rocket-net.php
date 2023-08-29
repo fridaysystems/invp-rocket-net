@@ -1,13 +1,16 @@
 <?php
-defined( 'ABSPATH' ) || exit;
-
 /**
  * Plugin Name: Inventory Presser - Rocket.net CDN
  * Plugin URI: https://inventorypresser.com
  * Description: Purges Rocket.net CDN cache when vehicles are updated via the WordPress REST API
  * Author: Corey Salzano
  * Author URI: https://github.com/csalzano
+ * Version: 1.0.1
+ *
+ * @package invp-rocket-net
  */
+
+defined( 'ABSPATH' ) || exit;
 
 add_action( 'invp_feed_complete', 'invp_rocket_purge' );
 /**
