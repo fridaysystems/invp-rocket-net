@@ -44,11 +44,6 @@ function invp_rocket_purge() {
 			'Authorization' => 'Bearer ' . $token,
 			'Content-Type'  => 'application/json',
 		),
-		'body'    => wp_json_encode(
-			array(
-				'domain' => $blog_domain,
-			)
-		),
 	);
 	$response = wp_remote_post( $endpoint, $args );
 	if ( is_wp_error( $response ) ) {
