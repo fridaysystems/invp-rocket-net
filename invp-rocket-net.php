@@ -20,6 +20,11 @@ add_action( 'invp_feed_complete', 'invp_rocket_purge' );
  * @return void
  */
 function invp_rocket_purge() {
+	$blog_domain = wp_parse_url( site_url(), PHP_URL_HOST );
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( '[invp-rocket-net][' . $blog_domain . '] invp_rocket_purge' );
+	}
+
 	// Do we even have a Rocket.net API token?
 	$token = get_option( 'invp_api_rocket_net_token' );
 	if ( empty( $token ) ) {
@@ -32,7 +37,6 @@ function invp_rocket_purge() {
 		return;
 	}
 
-	$blog_domain = wp_parse_url( site_url(), PHP_URL_HOST );
 	$endpoint    = sprintf(
 		'https://api.rocket.net/v1/sites/%d/cache/purge_everything?domain=%s',
 		CDN_SITE_ID,
@@ -47,7 +51,18 @@ function invp_rocket_purge() {
 		),
 	);
 	$response = wp_remote_post( $endpoint, $args );
-	if ( is_wp_error( $response ) ) {
-		error_log( '[invp-rocket-net][' . $blog_domain . '] ' . $response->get_error_message() );
+
+	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( '[invp-rocket-net][' . $blog_domain . '] response status ' . wp_remote_retrieve_response_code( $response ) );
+			if ( is_callable( array( $response, 'get_error_message ' ) ) ) {
+				error_log( '[invp-rocket-net][' . $blog_domain . '] ' . $response->get_error_message() );
+			}
+		}
+		return;
+	}
+
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( '[invp-rocket-net][' . $blog_domain . '] response body ' . wp_remote_retrieve_body( $response ) );
 	}
 }
